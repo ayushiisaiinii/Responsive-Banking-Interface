@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Responsive Banking Interface</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #fff2c6; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .bank-container {
+            background: #fffaf0;
+            width: 90%;
+            max-width: 400px;
+            padding: 22px;
+            border-radius: 14px;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            margin: 0;
+            color: #5a4a3f;
+        }
+
+        .balance-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f2c9cf; 
+            color: #4a3f35;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .transaction {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        input {
+            padding: 12px;
+            font-size: 15px;
+            border-radius: 6px;
+            border: 1.5px solid #e2c9a1;
+            background-color: #ffffff;
+            color: #4a3f35;
+        }
+
+        input::placeholder {
+            color: #b5a895;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #e7a1b0;
+            box-shadow: 0 0 6px rgba(231, 161, 176, 0.4);
+        }
+
+        .buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            flex: 1;
+            padding: 11px;
+            font-size: 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #4a3f35;
+            background: #ffe4a8; 
+        }
+
+        button:hover {
+            background: #f7d98a;
+        }
+
+        .message {
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .success {
+            color: #7a5a3a;
+        }
+
+        .error {
+            color: #b76b6b;
+        }
+        @media (max-width: 480px) {
+            .balance-box {
+                flex-direction: column;
+                gap: 6px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="bank-container">
+        <h2>My Bank</h2>
+
+        <div class="balance-box">
+            <span>Available Balance</span>
+            <span>₹ <span id="balance">5000</span></span>
+        </div>
+
+        <div class="transaction">
+            <input type="number" id="amount" placeholder="Enter amount">
+
+            <div class="buttons">
+                <button onclick="deposit()">Deposit</button>
+                <button onclick="withdraw()">Withdraw</button>
+            </div>
+        </div>
+
+        <div id="message" class="message"></div>
+    </div>
+
+    <script>
+        let balance = 5000;
+
+        function deposit() {
+            const amount = Number(document.getElementById("amount").value);
+            const message = document.getElementById("message");
+
+            if (amount <= 0 || isNaN(amount)) {
+                message.textContent = "Please enter a valid deposit amount";
+                message.className = "message error";
+                return;
+            }
+
+            balance += amount;
+            updateUI(`₹${amount} added successfully`, "success");
+        }
+
+        function withdraw() {
+            const amount = Number(document.getElementById("amount").value);
+            const message = document.getElementById("message");
+
+            if (amount <= 0 || isNaN(amount)) {
+                message.textContent = "Please enter a valid withdrawal amount";
+                message.className = "message error";
+                return;
+            }
+
+            if (amount > balance) {
+                message.textContent = "Insufficient balance";
+                message.className = "message error";
+                return;
+            }
+
+            balance -= amount;
+            updateUI(`₹${amount} withdrawn successfully`, "success");
+        }
+
+        function updateUI(msg, type) {
+            document.getElementById("balance").textContent = balance;
+            const message = document.getElementById("message");
+            message.textContent = msg;
+            message.className = `message ${type}`;
+            document.getElementById("amount").value = "";
+        }
+    </script>
+
+</body>
+</html>
